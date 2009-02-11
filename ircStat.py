@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#ircStat ver. 0.1 by grizz - Witek Firlej http://grizz.pl
+#ircStat ver. 0.2 by grizz - Witek Firlej http://grizz.pl
 
 __project__      = "ircStat"
 __author__    = "Witold Firlej (http://grizz.pl)"
-__version__   = "0.1"
+__version__   = "0.2"
 __license__   = "GPL"
 __copyright__ = "Witold Firlej"
 
 import os,sys
 # ====== some globals =============
 sourceDir = "/home/users/grizz/Programowanie/Python/Projekty/ircStat/FreeNode/#olympusclub/" # Working directory
-destDir = "/home/grizz/wwwcostam"
+destDir = "/home/users/grizz/temp/"
 # ====== some globals END =============
 
 def about ():
@@ -42,11 +42,24 @@ def help():
 """ TO DO later
 def getSourceDir ():
     try: 
-        sourceDir = sys.argv[1] #Przekazany argument sprawdzić czy ma shlasha na początku, jak nie ma to dodać aktualny katalog.
+        sourceDir = sys.argv[1] # get sourseDir from argv
     except IndexError:
         sourceDir = "." # if there is no argument, use current dir as sourceDir
     return sourceDir
 """
+def generateGnuplotSettings(endDate):
+	datafile = open("gnuplot.conf", "w")
+	datafile.write("set encoding iso_8859_2\n")
+	datafile.write("set title \"Aktywność #olympusclub\"\n")
+	datafile.write("set xlabel \"Data\"\n")
+	datafile.write("set ylabel \"Ilość wiadomości\"\n")
+	datafile.write("set xdata time\n")
+	datafile.write("set timefmt \"%Y-%m-%d\"\n")
+	datafile.write("set format x \"%y %b %d\"\n")
+	datafile.write("set terminal png small size 6000,800\n")
+	datafile.write("set output \'wykres.png\'\n")
+	datafile.write("plot [\"2008-05-11\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints\n")
+	datafile.close()
 
 def base():
 	"""base loop"""
@@ -65,10 +78,14 @@ def base():
 		datafile.write(record + "\n")
 	datafile.close()
 	verbose("==> Generating gnuplot configuration file...")
+	generateGnuplotSettings(record[:10]) # call function with last record, without number of lines, as endDate 
 	verbose("==> Run gnuplot...")
+	os.system("iconv -c -f UTF-8 gnuplot.conf -t iso-8859-2 -o gnuplot.confISO") #necessary for polish letters
+	os.system("gnuplot -persist gnuplot.confISO")
 	verbose("==> Copy graph to " + destDir)
+	os.system("cp wykres.png " + destDir)
 	verbose("ALL IS DONE!")
-	print "DUPA!"
+
 def main ():
 	try:
 		if sys.argv[1] == "--help":
