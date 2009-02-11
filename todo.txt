@@ -1,0 +1,5 @@
+### ircStat ToDo file ###
+- generate gnuplot config file with appropriate date range
+- gnuplot cosmetics
+- using destDir from commandline argument
+-
