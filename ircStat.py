@@ -16,7 +16,7 @@ destDir = "/home/grizz/wwwcostam"
 
 def about ():
 	"""About ircStat"""
-	about = "______________\n" + __project__ + " ver. " + __version__ + " by " + __author__ + "\n" \
+	about = "______________\n" + __project__ + " ver. " + __version__ + " by " + __author__ + "\n\n" \
 					+ "==> Source directory: " + sourceDir + "\n" \
 					+ "==> Destination directory: " + destDir + "\n"
 	return about
@@ -27,6 +27,17 @@ def verbose (msg):
 			print msg;
 	except IndexError:
 		pass
+
+def help():
+	print about()
+	try:
+		if sys.argv[1] == "--help":
+			print "OPTIONS:\n" \
+							+ "--help\t Print this information\n" \
+							+ "-v\t Be verbose\n"
+	except IndexError:
+		pass
+
     
 """ TO DO later
 def getSourceDir ():
@@ -37,12 +48,10 @@ def getSourceDir ():
     return sourceDir
 """
 
-def main():
-	"""main loop"""
+def base():
+	"""base loop"""
 	verbose(about())
-	verbose
 	#sourceDir = getSourceDir()
-	verbose("==> Working directory: " + sourceDir)
 	verbose("==> Data gathering...")
 	files = [d for d in os.listdir(sourceDir)]
 	count = -1
@@ -59,5 +68,15 @@ def main():
 	verbose("==> Run gnuplot...")
 	verbose("==> Copy graph to " + destDir)
 	verbose("ALL IS DONE!")
+	print "DUPA!"
+def main ():
+	try:
+		if sys.argv[1] == "--help":
+			help()
+		else:
+			base() # if there is argv but differ than --help
+	except IndexError:
+		base() # if here is no argv
 
+    
 main() # run main loop
