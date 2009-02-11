@@ -1,5 +1,6 @@
 ### ircStat ToDo file ###
 - generate gnuplot config file with appropriate date range
+	- iconv -c -f UTF-8 gnuplot.settings -t iso-8859-2 -o gnuplot.settingsISO
 - gnuplot cosmetics
 - using destDir from commandline argument
 -

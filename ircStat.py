@@ -10,50 +10,54 @@ __copyright__ = "Witold Firlej"
 
 import os,sys
 # ====== some globals =============
-destDir = "/home/users/grizz/Programowanie/Python/Projekty/ircStat/FreeNode/#olympusclub/" # Working directory
+sourceDir = "/home/users/grizz/Programowanie/Python/Projekty/ircStat/FreeNode/#olympusclub/" # Working directory
+destDir = "/home/grizz/wwwcostam"
 # ====== some globals END =============
 
 def about ():
-    """About ircStat"""
-    print "______________"
-    print __project__ + " ver. " + __version__ + " by " + __author__
-    print ""
+	"""About ircStat"""
+	about = "______________\n" + __project__ + " ver. " + __version__ + " by " + __author__ + "\n" \
+					+ "==> Source directory: " + sourceDir + "\n" \
+					+ "==> Destination directory: " + destDir + "\n"
+	return about
 
 def verbose (msg):
-    try:
-        if sys.argv[1] == "-v":
-            print msg;
-    except IndexError:
-         pass
+	try:
+		if sys.argv[1] == "-v":
+			print msg;
+	except IndexError:
+		pass
     
 """ TO DO later
-def getDestDir ():
+def getSourceDir ():
     try: 
-        destDir = sys.argv[1] #Przekazany argument sprawdzić czy ma shlasha na początku, jak nie ma to dodać aktualny katalog.
+        sourceDir = sys.argv[1] #Przekazany argument sprawdzić czy ma shlasha na początku, jak nie ma to dodać aktualny katalog.
     except IndexError:
-        destDir = "." # if there is no argument, use current dir as destDir
-    return destDir
+        sourceDir = "." # if there is no argument, use current dir as sourceDir
+    return sourceDir
 """
 
 def main():
-    """main loop"""
-    about()
-    #destDir = getDestDir()
-    verbose("Working directory: " + destDir)
-    verbose("Data gathering...")
-    files = [d for d in os.listdir(destDir)]
-    verbose (files)
-    count = -1
-    datafile = open("data.dat", "w")
-    for file in files:
-        for count, wiersz in enumerate(open(destDir+file, 'rU')):
-            pass
-        count += 1
-        record =  file[:-4] + " %i" % count # filename (without ".log") and number of lines in it.
-        verbose(record)
-        datafile.write(record + "\n")
-    datafile.close()
-
-    
+	"""main loop"""
+	verbose(about())
+	verbose
+	#sourceDir = getSourceDir()
+	verbose("==> Working directory: " + sourceDir)
+	verbose("==> Data gathering...")
+	files = [d for d in os.listdir(sourceDir)]
+	count = -1
+	datafile = open("data.dat", "w")
+	for file in files:
+		for count, wiersz in enumerate(open(sourceDir+file, 'rU')):
+			pass
+		count += 1
+		record =  file[:-4] + " %i" % count # filename (without ".log") and number of lines in it.
+		verbose(record)
+		datafile.write(record + "\n")
+	datafile.close()
+	verbose("==> Generating gnuplot configuration file...")
+	verbose("==> Run gnuplot...")
+	verbose("==> Copy graph to " + destDir)
+	verbose("ALL IS DONE!")
 
 main() # run main loop
