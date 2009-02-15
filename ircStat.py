@@ -53,6 +53,7 @@ def generateGnuplotSettings(endDate):
 	datafile.write("set title \"Aktywność #olympusclub\"\n")
 	datafile.write("set xlabel \"Data\"\n")
 	datafile.write("set ylabel \"Ilość wiadomości\"\n")
+	datafile.write("set grid\n")
 	datafile.write("set xdata time\n")
 	datafile.write("set timefmt \"%Y-%m-%d\"\n")
 	datafile.write("set format x \"%y %b %d\"\n")
