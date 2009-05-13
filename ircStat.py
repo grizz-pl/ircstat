@@ -59,7 +59,7 @@ def generateGnuplotSettings(endDate):
 	datafile.write("set format x \"%y %b %d\"\n")
 	datafile.write("set terminal png small size 6000,800\n")
 	datafile.write("set output \'wykres.png\'\n")
-	datafile.write("plot [\"2008-05-11\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints\n")
+	datafile.write("plot [\"2008-05-11\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
 	datafile.close()
 
 def base():
@@ -77,7 +77,9 @@ def base():
 		record =  file[:-4] + " %i" % count # filename (without ".log") and number of lines in it.
 		verbose(record)
 		datafile.write(record + "\n")
-	datafile.close()
+	datafile.close()	
+	verbose("==> calculating moving average")
+	movingAverage()
 	verbose("==> Generating gnuplot configuration file...")
 	generateGnuplotSettings(record[:10]) # call function with last record, without number of lines, as endDate 
 	verbose("==> Run gnuplot...")
@@ -86,6 +88,30 @@ def base():
 	verbose("==> Copy graph to " + destDir)
 	os.system("cp wykres.png " + destDir)
 	verbose("ALL IS DONE!")
+
+def movingAverage():
+	numberoflines = []
+	movingaverage = []
+	dates = []
+	averagedatafile = open("average.dat", "w")
+	data = open("data.dat", "r")
+
+	for line in data:
+		dates.append(line.split()[0])
+		numberoflines.append(int(line.split()[1]))
+
+	rng = 0
+	for number in numberoflines:
+		start = rng
+		stop = rng+30
+		rng +=1
+		suma = sum(numberoflines[start:stop])
+		movingaverage.append(suma/30)
+
+	for rng in range(len(open("data.dat", "rU").readlines())):
+		record = str(dates[rng]) + " " + str(movingaverage[rng])
+		verbose("==> Average: " + record)
+		averagedatafile.write(record + "\n")
 
 def main ():
 	try:
