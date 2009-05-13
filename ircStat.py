@@ -15,7 +15,7 @@ destDir = "/home/grizz/www/grizz.pl/htdocs/irc/"
 
 def about ():
 	"""About ircStat"""
-	about = "______________\n" + __project__ + " ver. " + __version__ + " by " + __author__ + "\n\n" \
+	about = "______________\n" + __project__ + " by " + __author__ + "\n\n" \
 					+ "==> Source directory: " + sourceDir + "\n" \
 					+ "==> Destination directory: " + destDir + "\n"
 	return about
