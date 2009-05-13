@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#ircStat ver. 0.2 by grizz - Witek Firlej http://grizz.pl
+#ircStat by grizz - Witek Firlej http://grizz.pl
 
 __project__      = "ircStat"
 __author__    = "Witold Firlej (http://grizz.pl)"
-__version__   = "0.2"
 __license__   = "GPL"
 __copyright__ = "Witold Firlej"
 
 import os,sys
 # ====== some globals =============
-sourceDir = "/home/users/grizz/Programowanie/Python/Projekty/ircStat/FreeNode/#olympusclub/" # Working directory
-destDir = "/home/users/grizz/temp/"
+sourceDir = "/home/grizz/.irssi/logs/FreeNode/#olympusclub/" # Working directory
+destDir = "/home/grizz/www/grizz.pl/htdocs/irc/"
 # ====== some globals END =============
 
 def about ():
@@ -57,9 +56,9 @@ def generateGnuplotSettings(endDate):
 	datafile.write("set xdata time\n")
 	datafile.write("set timefmt \"%Y-%m-%d\"\n")
 	datafile.write("set format x \"%y %b %d\"\n")
-	datafile.write("set terminal png small size 6000,800\n")
+	datafile.write("set terminal png small size 2000,800\n")
 	datafile.write("set output \'wykres.png\'\n")
-	datafile.write("plot [\"2008-05-11\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
+	datafile.write("plot [\"2009-01-01\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
 	datafile.close()
 
 def base():
@@ -99,16 +98,20 @@ def movingAverage():
 	for line in data:
 		dates.append(line.split()[0])
 		numberoflines.append(int(line.split()[1]))
-
+	daysnumber = len(open("data.dat", "rU").readlines())
 	rng = 0
+	divisor = 30 # temporary
 	for number in numberoflines:
 		start = rng
 		stop = rng+30
 		rng +=1
 		suma = sum(numberoflines[start:stop])
-		movingaverage.append(suma/30)
+		if stop > daysnumber:
+			moddivisor = stop-daysnumber
+			divisor = 30-moddivisor
+		movingaverage.append(suma/divisor)
 
-	for rng in range(len(open("data.dat", "rU").readlines())):
+	for rng in range(daysnumber):
 		record = str(dates[rng]) + " " + str(movingaverage[rng])
 		verbose("==> Average: " + record)
 		averagedatafile.write(record + "\n")
