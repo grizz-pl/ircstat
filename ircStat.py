@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#ircStat ver. 0.2 by grizz - Witek Firlej http://grizz.pl
+#ircStat by grizz - Witek Firlej http://grizz.pl
 
 __project__      = "ircStat"
 __author__    = "Witold Firlej (http://grizz.pl)"
-__version__   = "0.2"
 __license__   = "GPL"
 __copyright__ = "Witold Firlej"
 
@@ -109,9 +108,7 @@ def movingAverage():
 		suma = sum(numberoflines[start:stop])
 		if stop > daysnumber:
 			moddivisor = stop-daysnumber
-			print "dod", moddivisor
 			divisor = 30-moddivisor
-			print "Divis", divisor
 		movingaverage.append(suma/divisor)
 
 	for rng in range(daysnumber):
