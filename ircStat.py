@@ -11,6 +11,8 @@ import os,sys
 # ====== some globals =============
 sourceDir = "/home/grizz/.irssi/logs/FreeNode/#olympusclub/" # Working directory
 destDir = "/home/grizz/www/grizz.pl/htdocs/irc/"
+period = 30 												# period of moving average - higher means soften line
+startDate = "2009-01-01" 									# draw a graph only from this date; format yyyy-mm-dd
 # ====== some globals END =============
 
 def about ():
@@ -58,7 +60,7 @@ def generateGnuplotSettings(endDate):
 	datafile.write("set format x \"%y %b %d\"\n")
 	datafile.write("set terminal png small size 2000,800\n")
 	datafile.write("set output \'wykres.png\'\n")
-	datafile.write("plot [\"2009-01-01\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
+	datafile.write("plot [\""+startDate+"\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
 	datafile.close()
 
 def base():
@@ -100,15 +102,15 @@ def movingAverage():
 		numberoflines.append(int(line.split()[1]))
 	daysnumber = len(open("data.dat", "rU").readlines())
 	rng = 0
-	divisor = 30 # temporary
+	divisor = period # temporary
 	for number in numberoflines:
 		start = rng
-		stop = rng+30
+		stop = rng+period
 		rng +=1
 		suma = sum(numberoflines[start:stop])
 		if stop > daysnumber:
 			moddivisor = stop-daysnumber
-			divisor = 30-moddivisor
+			divisor = period-moddivisor
 		movingaverage.append(suma/divisor)
 
 	for rng in range(daysnumber):
