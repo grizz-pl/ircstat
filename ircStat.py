@@ -7,7 +7,7 @@ __author__    = "Witold Firlej (http://grizz.pl)"
 __license__   = "GPL"
 __copyright__ = "Witold Firlej"
 
-import os,sys
+import os,sys,datetime
 # ====== some globals =============
 sourceDir = "/home/grizz/.irssi/logs/FreeNode/#olympusclub/" # Working directory
 destDir = "/home/grizz/www/grizz.pl/htdocs/irc/"
@@ -48,17 +48,18 @@ def getSourceDir ():
         sourceDir = "." # if there is no argument, use current dir as sourceDir
     return sourceDir
 """
-def generateGnuplotSettings(endDate):
+def generateGnuplotSettings(endDate, currLines):
 	datafile = open("gnuplot.conf", "w")
 	datafile.write("set encoding iso_8859_2\n")
-	datafile.write("set title \"Aktywność #olympusclub\"\n")
+	title = datetime.datetime.now().strftime("..:: A k t y w n o ś ć    k a n a ł u    #olympusclub ::.. \\nstan na %d/%m/%Y %H:%M wynosi" + currLines)
+	datafile.write("set title \"" + title + "\"\n")
 	datafile.write("set xlabel \"Data\"\n")
 	datafile.write("set ylabel \"Ilość wiadomości\"\n")
 	datafile.write("set grid\n")
 	datafile.write("set xdata time\n")
 	datafile.write("set timefmt \"%Y-%m-%d\"\n")
 	datafile.write("set format x \"%y %b %d\"\n")
-	datafile.write("set terminal png small size 2000,800\n")
+	datafile.write("set terminal png small size 3500,660\n")
 	datafile.write("set output \'wykres.png\'\n")
 	datafile.write("plot [\""+startDate+"\" : \"" +endDate+"\"] \"data.dat\" using 1:2 with linespoints, \"average.dat\" using 1:2 with linespoints\n")
 	datafile.close()
@@ -82,7 +83,7 @@ def base():
 	verbose("==> calculating moving average")
 	movingAverage()
 	verbose("==> Generating gnuplot configuration file...")
-	generateGnuplotSettings(record[:10]) # call function with last record, without number of lines, as endDate 
+	generateGnuplotSettings(record[:10], record[10:]) # call function with last record, without number of lines, as endDate and number of lines to status display
 	verbose("==> Run gnuplot...")
 	os.system("iconv -c -f UTF-8 gnuplot.conf -t iso-8859-2 -o gnuplot.confISO") #necessary for polish letters
 	os.system("gnuplot -persist gnuplot.confISO")
