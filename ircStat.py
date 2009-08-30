@@ -89,6 +89,7 @@ def base():
 	os.system("gnuplot -persist gnuplot.confISO")
 	verbose("==> Copy graph to " + destDir)
 	os.system("cp wykres.png " + destDir)
+	os.system("rm wykres.png gnuplot.confISO gnuplot.conf average.dat data.dat") # cleaning!
 	verbose("ALL IS DONE!")
 
 def movingAverage():
